@@ -313,7 +313,7 @@ const __dirname = path.dirname(__filename);
 // هنا بنقول لسيرفر Express يطلع ملفات الـ React من مجلد dist
 app.use(express.static(path.join(__dirname, "../dist"))); // أو حسب مكان مجلد dist عندك
 
-app.get("*", (req, res) => {
+app.get(/(.*)/, (req, res) => {
   res.sendFile(path.join(__dirname, "../dist/index.html"));
 });
 

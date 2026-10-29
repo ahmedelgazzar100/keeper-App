@@ -56,8 +56,6 @@ db.connect()
   .then(() => console.log("Database connected successfully! 🚀"))
   .catch((err) => console.error("Database connection error:", err));
 
-export default db;
-
 async function getNotes(userEmail) {
   const notes = await db.query("SELECT * FROM notes WHERE email = $1", [
     userEmail,
@@ -306,4 +304,4 @@ if (process.env.NODE_ENV !== "production") {
   });
 }
 
-module.exports = app;
+export default app;

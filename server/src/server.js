@@ -310,11 +310,11 @@ import { fileURLToPath } from "url";
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-// هنا بنقول لسيرفر Express يطلع ملفات الـ React من مجلد dist
-app.use(express.static(path.join(__dirname, "../../client/dist")));
+// السيرفر هياخد الملفات من جنبه مباشرة بعد ما نظبط الـ Build
+app.use(express.static(path.join(__dirname, "../client/dist")));
 
 app.get(/(.*)/, (req, res) => {
-  res.sendFile(path.join(__dirname, "../../client/dist/index.html"));
+  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
 });
 
 export default app;

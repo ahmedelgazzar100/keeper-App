@@ -1,0 +1,205 @@
+:root {
+  --main-color: #331b3f;
+  --main-color-alt: #acc7b4;
+}
+
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: "Cairo", sans-serif;
+  background-color: var(--main-color);
+  margin: 0;
+  padding: 0;
+}
+.header {
+  background-color: var(--main-color);
+  color: var(--main-color-alt);
+  font-size: 20px;
+  padding: 10px;
+  margin: 0 auto;
+}
+.header h1 {
+  margin: 0 auto;
+  width: fit-content;
+}
+
+.form-note {
+  width: 85%;
+  background-color: var(--main-color-alt);
+  margin: 20px auto;
+  display: flex;
+  flex-direction: column;
+}
+.form-note input,
+.note-card input {
+  width: 100%;
+  margin: 0 auto;
+  background-color: var(--main-color-alt);
+  border: none;
+  outline: var(--main-color-alt);
+  padding: 10px;
+}
+.form-note input::placeholder,
+.note-card input::placeholder {
+  color: var(--main-color);
+  font-size: 20px;
+}
+.form-note input:focus::placeholder,
+.note-card input:focus::placeholder {
+  color: transparent;
+}
+.form-note textarea,
+.note-card textarea {
+  background-color: var(--main-color-alt);
+  border: none;
+  outline: none;
+  padding: 10px;
+  resize: none;
+}
+.form-note textarea::placeholder,
+.note-card textarea::placeholder {
+  color: var(--main-color);
+  font-size: 20px;
+}
+.form-note textarea:focus::placeholder,
+.note-card textarea:focus::placeholder {
+  color: transparent;
+}
+.form-note button {
+  display: block;
+  margin-left: auto;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: var(--main-color-alt);
+  border: none;
+  cursor: pointer;
+  color: var(--main-color);
+  font-size: 20px;
+}
+.notes {
+  width: 85%;
+  max-width: 1200px;
+  gap: 30px; /* مسافة متساوية بين الكروت أفقياً ورأسياً */
+  margin: 30px auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start; /* تبدأ ترص من اليمين أو الشمال حسب اتجاه موقعك */
+}
+
+.note-card {
+  color: #333;
+  /* بدلاً من 250px لوحدها، هنخليها تاخد تقريباً ثلث المساحة ناقص الـ gap عشان يجوا 3 في السطر بالضبط */
+  flex-basis: calc(33.333% - 20px);
+  min-width: 200px; /* حد أدنى عشان الموبايل */
+  /* flex-grow: 1; */
+  padding: 20px;
+  background-color: var(--main-color-alt);
+  border-radius: 10px;
+  border: 1px solid #e0e0e0;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+@media (max-width: 991px) {
+  .note-card {
+    flex-grow: 1;
+  }
+}
+
+.note-card h2 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+  color: var(--main-color);
+}
+.note-card p {
+  font-size: 0.95rem;
+  color: var(--main-color);
+  line-height: 1.5; /* مسافة مريحة بين السطور */
+  word-break: break-word; /* عشان لو حد كتب كلام طويل ما يطلعش بره الكارت */
+}
+
+.note-card button {
+  display: block;
+  margin-left: auto;
+  width: fit-content;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: var(--main-color-alt);
+  border: none;
+  cursor: pointer;
+  color: var(--main-color);
+  font-size: 20px;
+}
+
+.user {
+  margin-left: 10px;
+}
+.user input {
+  background-color: var(--main-color-alt);
+  border: none;
+  outline: none;
+  color: var(--main-color);
+  padding: 5px 10px;
+}
+.user label {
+  color: var(--main-color-alt);
+  font-size: 20px;
+}
+.add-user,
+.user-name {
+  margin-left: 10px;
+  margin-top: 5px;
+  cursor: pointer;
+  background-color: var(--main-color-alt);
+  color: var(--main-color);
+  border: none;
+  padding: 5px;
+  border-radius: 6px;
+}
+.login {
+  background-color: var(--main-color-alt);
+  width: 50%;
+  margin: 20px auto;
+  padding: 20px;
+}
+.login div {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+}
+.login div label {
+  margin-right: 5px;
+  color: var(--main-color);
+}
+.login div input {
+  background-color: var(--main-color-alt);
+  border: none;
+  outline: none;
+}
+.login button {
+  padding: 5px;
+  margin-right: 5px;
+  background-color: var(--main-color-alt);
+  border-color: var(--main-color);
+  border-radius: 6px;
+  cursor: pointer;
+}
+.logOut {
+  display: block;
+  width: fit-content;
+  margin: 10px auto;
+  padding: 5px;
+  border-radius: 7px;
+  background-color: var(--main-color-alt);
+  border: none;
+  color: var(--main-color);
+  font-size: 20px;
+  cursor: pointer;
+}

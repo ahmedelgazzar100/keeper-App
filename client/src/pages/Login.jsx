@@ -5,7 +5,7 @@ export default function Login() {
 
   const handleLoginSubmit = async (userData) => {
     try {
-      const response = await fetch("http://localhost:3000/login", {
+      const response = await fetch("/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -29,7 +29,7 @@ export default function Login() {
 
   const handleRegisterSubmit = async (userData) => {
     try {
-      const response = await fetch("http://localhost:3000/register", {
+      const response = await fetch("/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -51,7 +51,7 @@ export default function Login() {
 
   const handleGoogle = () => {
     // ده بيخلي المتصفح يفتح رابط السيرفر مباشرة، فالسيرفر يحوله لجوجل فوراً
-    window.location.href = "http://localhost:3000/auth/google";
+    window.location.href = "/auth/google";
   };
 
   return (

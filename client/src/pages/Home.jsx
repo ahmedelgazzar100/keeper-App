@@ -12,12 +12,9 @@ export default function Home() {
     async function fetchNotesAndAuth() {
       try {
         // 2. بنفحص الأول هل اليوزر مسجل دخول ولا لأ
-        const authResponse = await fetch(
-          "http://localhost:3000/api/check-auth",
-          {
-            credentials: "include",
-          },
-        );
+        const authResponse = await fetch("/api/check-auth", {
+          credentials: "include",
+        });
 
         if (!authResponse.ok) {
           navigate("/"); // لو مش مسجل، اطرده لبرة
@@ -25,7 +22,7 @@ export default function Home() {
         }
 
         // 3. لو مسجل، بنسحب النوتات بتاعته
-        const notesResponse = await fetch("http://localhost:3000/api/notes", {
+        const notesResponse = await fetch("/api/notes", {
           credentials: "include",
         });
 
@@ -44,7 +41,7 @@ export default function Home() {
   }, [navigate]); // الـ Dependency Array
 
   function handleAdd(note) {
-    fetch("http://localhost:3000/api/notes", {
+    fetch("/api/notes", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(note),
@@ -58,7 +55,7 @@ export default function Home() {
 
   function deletItem(id) {
     console.log("ID being deleted:", id, typeof id);
-    fetch(`http://localhost:3000/api/notes/${id}`, {
+    fetch(`/api/notes/${id}`, {
       method: "DELETE",
       credentials: "include",
     })
@@ -70,7 +67,7 @@ export default function Home() {
   }
 
   function editNote(id, editedNote) {
-    fetch(`http://localhost:3000/api/notes/${id}`, {
+    fetch(`/api/notes/${id}`, {
       method: "PATCH",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(editedNote),
@@ -84,7 +81,7 @@ export default function Home() {
 
   async function handleLogout() {
     try {
-      const response = await fetch("http://localhost:3000/api/logout", {
+      const response = await fetch("/api/logout", {
         method: "GET",
         credentials: "include",
       });

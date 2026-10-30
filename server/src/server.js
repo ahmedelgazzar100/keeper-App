@@ -7,9 +7,9 @@ import passport from "passport";
 import { Strategy } from "passport-local";
 import GoogleStrategy from "passport-google-oauth2";
 import session from "express-session";
+import connectPgSimple from "connect-pg-simple";
 import env from "dotenv";
 
-// 1. لازم dotenv تشتغل في أول سطر خالص عشان تقرأ متغيرات البيئة
 env.config();
 
 const app = express();
@@ -19,42 +19,33 @@ const saltRounds = 10;
 const BACKEND_URL = process.env.BACKEND_URL || "http://localhost:3000";
 const FRONTEND_URL = process.env.FRONTEND_URL || "http://localhost:5173";
 
+const db = new pg.Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
+
+const PgSession = connectPgSimple(session);
+
 app.use(express.json());
-
-app.use(
-  cors({
-    origin: FRONTEND_URL,
-    credentials: true,
-  }),
-);
-
+app.use(cors({ origin: FRONTEND_URL, credentials: true }));
 app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(
   session({
+    store: new PgSession({ pool: db }),
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
     cookie: {
       secure: process.env.NODE_ENV === "production",
-      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      sameSite: "lax",
+      maxAge: 1000 * 60 * 60 * 24 * 7,
     },
   }),
 );
 
 app.use(passport.initialize());
 app.use(passport.session());
-
-const db = new pg.Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false,
-  },
-});
-
-db.connect()
-  .then(() => console.log("Database connected successfully! 🚀"))
-  .catch((err) => console.error("Database connection error:", err));
 
 async function getNotes(userEmail) {
   const notes = await db.query("SELECT * FROM notes WHERE email = $1", [
@@ -112,7 +103,10 @@ app.delete("/api/notes/:id", async (req, res) => {
     return res.status(401).json({ message: "غير مسجل الدخول" });
   }
   const id = Number(req.params.id);
-  await db.query("DELETE FROM notes WHERE id = $1", [id]);
+  await db.query("DELETE FROM notes WHERE id = $1 AND email = $2", [
+    id,
+    req.user.email,
+  ]);
   const notes = await getNotes(req.user.email);
   res.json(notes);
 });
@@ -125,11 +119,10 @@ app.patch("/api/notes/:id", async (req, res) => {
   const id = Number(req.params.id);
   const editNote = req.body;
 
-  await db.query("UPDATE notes SET title = $1, content = $2 WHERE id = $3", [
-    editNote.title,
-    editNote.content,
-    id,
-  ]);
+  await db.query(
+    "UPDATE notes SET title = $1, content = $2 WHERE id = $3 AND email = $4",
+    [editNote.title, editNote.content, id, req.user.email],
+  );
 
   const notes = await getNotes(req.user.email);
   res.json(notes);
@@ -303,18 +296,5 @@ if (process.env.NODE_ENV !== "production") {
     console.log(`Server running on port ${PORT}`);
   });
 }
-
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-
-// السيرفر هياخد الملفات من جنبه مباشرة بعد ما نظبط الـ Build
-app.use(express.static(path.join(__dirname, "../client/dist")));
-
-app.get(/(.*)/, (req, res) => {
-  res.sendFile(path.join(__dirname, "../client/dist/index.html"));
-});
 
 export default app;
